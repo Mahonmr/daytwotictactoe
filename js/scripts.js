@@ -107,6 +107,11 @@ $(document).ready(function() {
   });
 
   $('.row').on("click", "div", function() {
-  console.log(this);
+    //console.log(this.id)
+    x_y = (new_board.nBoard[parseInt(this.id)]);
+    space = new_board.findSpace(parseInt(x_y.xCoordinate), parseInt(x_y.yCoordinate));
+    console.log(space)
+    //testPlayer.markSpace(space);
+    // Board.findSpace(x, y)
   });
 });

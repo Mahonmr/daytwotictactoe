@@ -2,7 +2,7 @@ describe('Player', function() {
     it("returns the player's mark", function() {
       var testPlayer = new Player("X", true);
       expect(testPlayer.mark).to.equal("X");
-      expect(testPlayer.AI).to.equal(true);
+      expect(testPlayer.isAI).to.equal(true);
    });
    it("does not allow two players to mark the same space", function() {
      var testPlayer = new Player("X", true);
@@ -10,7 +10,7 @@ describe('Player', function() {
      var testSpace = new Space(1,2);
      testPlayer.markSpace(testSpace);
      secondTestPlayer.markSpace(testSpace);
-     expect(testSpace.marker).to.equal(testPlayer);
+     expect(testSpace.player).to.equal(testPlayer);
   });
 });
 
@@ -40,7 +40,7 @@ describe('Board', function() {
      var player = new Player("X", true);
 
      player.markSpace(board.findSpace(1, 1));
-     expect(board.nBoard[0].marker).to.equal(player);
+     expect(board.nBoard[0].player).to.equal(player);
    });
 });
 
@@ -48,13 +48,43 @@ describe('Game', function() {
   it("checks all constructor variables", function(){
     var game = new Game(true);
     expect(game.multiplayer).to.equal(true);
-    expect(game.players[0].AI).to.equal(false);
+    expect(game.players[0].isAI).to.equal(false);
     expect(game.currentTurn < 2).to.equal(!undefined);
   });
 
-  it("changes player turn", function() {
+  it("changeTurn method changes player turn", function() {
     var game = new Game(true);
     var previousTurn = game.currentTurn;
     expect(game.changeTurn()).to.not.equal(previousTurn);
-  })
+  });
+
+  it("winner method returns winning player for vertical match", function() {
+    var game = new Game(true);
+    var board = game.board;
+    var player = game.players[0];
+    player.markSpace(board.findSpace(3, 1));
+    player.markSpace(board.findSpace(3, 2));
+    player.markSpace(board.findSpace(3, 3));
+    expect(game.findWinner()).to.equal(player);
+  });
+
+  it("winner method returns winning player for horizontal match", function() {
+    var game = new Game(true);
+    var board = game.board;
+    var player = game.players[0];
+    player.markSpace(board.findSpace(1, 1));
+    player.markSpace(board.findSpace(2, 1));
+    player.markSpace(board.findSpace(3, 1));
+    expect(game.findWinner()).to.equal(player);
+  });
+
+  it("winner method returns winning player for diagonal match", function() {
+    var game = new Game(true);
+    var board = game.board;
+    var player = game.players[0];
+    player.markSpace(board.findSpace(1, 1));
+    player.markSpace(board.findSpace(2, 2));
+    player.markSpace(board.findSpace(3, 3));
+    expect(game.findWinner()).to.equal(player);
+  });
 });

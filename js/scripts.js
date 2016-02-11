@@ -1,22 +1,22 @@
-function Player(mark, AI) {
+function Player(mark, isAI) {
   this.mark = mark;
-  this.AI = AI;
+  this.isAI = isAI;
 }
 
 Player.prototype.markSpace = function(space) {
-  if (space.marker === undefined) {
-    space.marker = this;
+  if (space.player === undefined) {
+    space.player = this;
   }
 }
 
 function Space(xCoordinate, yCoordinate) {
   this.xCoordinate = xCoordinate;
   this.yCoordinate = yCoordinate;
-  this.marker;
+  this.player;
 }
 
 Space.prototype.markedBy = function () {
-  return this.marker;
+  return this.player;
 }
 
 function Board () {
@@ -42,6 +42,7 @@ function Game(multiplayer) {
   this.multiplayer = multiplayer;
   this.players = [];
   this.currentTurn = Math.floor(Math.random() * 2) ;
+  this.board = new Board();
 
   this.players.push(new Player("X", false));
   if(multiplayer === true) {
@@ -49,9 +50,52 @@ function Game(multiplayer) {
   } else {
     this.players.push(new Player("O", true));
   }
+}
 
   Game.prototype.changeTurn = function () {
     return (this.currentTurn === 0)? 1: 0;
   }
 
+  Game.prototype.findWinner = function() {
+    if ((this.board.findSpace(1, 1).markedBy() && this.board.findSpace(2, 2).markedBy() && this.board.findSpace(3, 3).markedBy()) || (this.board.findSpace(3, 1).markedBy() && this.board.findSpace(2, 2).markedBy() && this.board.findSpace(1, 3).markedBy())) {
+      return this.board.findSpace(2, 2).markedBy();
+    }
+    //debugger;
+    var check = undefined;
+    var notMatch = true;
+    for (var i = 1; i <= 3; i++) {
+      for (var j = 1; j <= 3; j++) {
+        if (this.board.findSpace(i, j).markedBy() != undefined) {
+          if (check === undefined) {
+            check = this.board.findSpace(i, j).markedBy().mark;
+          } else if (check = this.board.findSpace(i, j).markedBy().mark) {
+            notMatch = false;
+          } else {
+            notMatch = true;
+          }
+        }
+      }
+      if (!notMatch) {
+        return this.board.findSpace(i, j-1).markedBy();
+      }
+      check = undefined;
+    }
+
+    for (var i = 1; i <= 3; i++) {
+      for (var j = 1; j <= 3; j++) {
+        if (this.board.findSpace(j, i).markedBy() != undefined) {
+          if (check === undefined) {
+            check = this.board.findSpace(j, i).markedBy().mark;
+          } else if (check = this.board.findSpace(j, i).markedBy().mark) {
+            notMatch = false;
+          } else {
+            notMatch = true;
+          }
+        }
+      }
+    if (!notMatch) {
+      return this.board.findSpace(j-1, i).markedBy();
+    }
+    check = undefined;
+  }
 }

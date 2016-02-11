@@ -99,3 +99,14 @@ function Game(multiplayer) {
     check = undefined;
   }
 }
+
+$(document).ready(function() {
+  $("form#new-game").submit(function(event) {
+    event.preventDefault();
+    new_board = new Board();
+  });
+
+  $('.row').on("click", "div", function() {
+  console.log(this);
+  });
+});

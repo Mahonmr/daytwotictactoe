@@ -53,7 +53,13 @@ function Game(multiplayer) {
 }
 
   Game.prototype.changeTurn = function () {
-    return (this.currentTurn === 0)? 1: 0;
+    if(this.currentTurn === 0) {
+      this.currentTurn = 1;
+      return 1;
+    } else {
+      this.currentTurn = 0;
+      return 0;
+    }
   }
 
   Game.prototype.findWinner = function() {
@@ -103,15 +109,17 @@ function Game(multiplayer) {
 $(document).ready(function() {
   $("form#new-game").submit(function(event) {
     event.preventDefault();
-    new_board = new Board();
+    new_game = new Game();
+    console.log(new_game);
   });
 
   $('.row').on("click", "div", function() {
-    //console.log(this.id)
-    x_y = (new_board.nBoard[parseInt(this.id)]);
-    space = new_board.findSpace(parseInt(x_y.xCoordinate), parseInt(x_y.yCoordinate));
-    console.log(space)
-    //testPlayer.markSpace(space);
+    space = (new_game.board.nBoard[parseInt(this.id)]);
+
+
+console.log(new_game.changeTurn())
+
+    // testPlayer.markSpace(space);
     // Board.findSpace(x, y)
   });
 });

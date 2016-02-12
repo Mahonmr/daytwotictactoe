@@ -138,9 +138,5 @@ $(document).ready(function() {
       alert(player.mark + ' is the winner!');
     }
 
-    // winner = new_game.findWinner()
-    // if (winner !== undefined) {
-    //   alert(winner.mark + ' is the winner!')
-    // }
   });
 });

@@ -29,15 +29,13 @@ function Board () {
   }
 }
 
-
-
 Board.prototype.findSpace = function (x, y) {
   for(var indvSpace in this.nBoard) {
     if ((x === this.nBoard[indvSpace].xCoordinate) && (y === this.nBoard[indvSpace].yCoordinate)){
       return this.nBoard[indvSpace];
     }
   }
-};
+}
 
 Board.prototype.threeInARow = function(player) {
     var rows = [[0,4,8],[2,4,6],[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8]];
@@ -50,7 +48,7 @@ Board.prototype.threeInARow = function(player) {
 function Game(multiplayer) {
   this.multiplayer = multiplayer;
   this.players = [];
-  this.currentTurn = Math.floor(Math.random() * 2) ;
+  this.currentTurn = Math.floor(Math.random() * 2);
   this.board = new Board();
 
   this.players.push(new Player("X", false));
@@ -61,15 +59,15 @@ function Game(multiplayer) {
   }
 }
 
-  Game.prototype.changeTurn = function () {
-    if(this.currentTurn === 0) {
-      this.currentTurn = 1;
-      return 1;
-    } else {
-      this.currentTurn = 0;
-      return 0;
-    }
+Game.prototype.changeTurn = function () {
+  if(this.currentTurn === 0) {
+    this.currentTurn = 1;
+    return 1;
+  } else {
+    this.currentTurn = 0;
+    return 0;
   }
+}
 
 $(document).ready(function() {
   $("form#new-game").submit(function(event) {
@@ -77,7 +75,6 @@ $(document).ready(function() {
     new_game = new Game();
     console.log(new_game)
   });
-
 
   $('.row').on("click", ".squares", function() {
     space = (new_game.board.nBoard[parseInt(this.id)]);
@@ -87,11 +84,10 @@ $(document).ready(function() {
     $(this).text(player.mark).removeClass("squares");
 
     if (new_game.board.threeInARow(player)) {
-        if(confirm(player.mark + ' is the winner!')) {
-          location.reload();
-          console.log(new_game.board.nBoard)
-        }
+      if(confirm(player.mark + ' is the winner!')) {
+        location.reload();
+        console.log(new_game.board.nBoard)
+      }
     }
-
   });
 });

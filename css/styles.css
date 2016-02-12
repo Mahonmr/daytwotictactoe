@@ -1,6 +1,15 @@
-.squares {
-  background-color: #bbecdf;
+.frozen {
+  background-color: #94e141;
   width:150px;
   height:150px;
   margin: 5px;
+}
+
+body {
+  background-color: black;
+}
+
+div {
+  font-size: 30px;
+  text-align: center;
 }

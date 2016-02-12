@@ -27,8 +27,9 @@ function Board () {
       this.nBoard.push(space);
     }
   }
-
 }
+
+
 
 Board.prototype.findSpace = function (x, y) {
   for(var indvSpace in this.nBoard) {
@@ -37,6 +38,18 @@ Board.prototype.findSpace = function (x, y) {
     }
   }
 };
+
+Board.prototype.threeInARow = function(player) {
+    var rows = [[0,4,8],[2,4,6],[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8]];
+    var board = this;
+    // console.log("we are in threeInARow");
+    // console.log(board.nBoard[0].markedBy());
+    // console.log("what the hell is player");
+    // console.log(player)
+    return rows.some(function(winningCombo) {
+      return (board.nBoard[winningCombo[0]].markedBy() === player && board.nBoard[winningCombo[1]].markedBy() === player && board.nBoard[winningCombo[2]].markedBy() === player);
+    });
+  }
 
 function Game(multiplayer) {
   this.multiplayer = multiplayer;
@@ -81,7 +94,7 @@ function Game(multiplayer) {
           }
         }
       }
-      if (!notMatch) {
+      if (notMatch = false) {
         return this.board.findSpace(i, j-1).markedBy();
       }
       check = undefined;
@@ -110,16 +123,24 @@ $(document).ready(function() {
   $("form#new-game").submit(function(event) {
     event.preventDefault();
     new_game = new Game();
-    console.log(new_game);
+    console.log(new_game)
   });
 
-  $('.row').on("click", "div", function() {
+
+  $('.row').on("click", ".squares", function() {
     space = (new_game.board.nBoard[parseInt(this.id)]);
+    turn = new_game.changeTurn();
+    player = new_game.players[turn];
+    player.markSpace(space);
+    $(this).text(player.mark).removeClass("squares");
 
+    if (new_game.board.threeInARow(player)) {
+      alert(player.mark + ' is the winner!');
+    }
 
-console.log(new_game.changeTurn())
-
-    // testPlayer.markSpace(space);
-    // Board.findSpace(x, y)
+    // winner = new_game.findWinner()
+    // if (winner !== undefined) {
+    //   alert(winner.mark + ' is the winner!')
+    // }
   });
 });

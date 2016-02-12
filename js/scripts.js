@@ -42,10 +42,6 @@ Board.prototype.findSpace = function (x, y) {
 Board.prototype.threeInARow = function(player) {
     var rows = [[0,4,8],[2,4,6],[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8]];
     var board = this;
-    // console.log("we are in threeInARow");
-    // console.log(board.nBoard[0].markedBy());
-    // console.log("what the hell is player");
-    // console.log(player)
     return rows.some(function(winningCombo) {
       return (board.nBoard[winningCombo[0]].markedBy() === player && board.nBoard[winningCombo[1]].markedBy() === player && board.nBoard[winningCombo[2]].markedBy() === player);
     });
@@ -75,50 +71,6 @@ function Game(multiplayer) {
     }
   }
 
-  Game.prototype.findWinner = function() {
-    if ((this.board.findSpace(1, 1).markedBy() && this.board.findSpace(2, 2).markedBy() && this.board.findSpace(3, 3).markedBy()) || (this.board.findSpace(3, 1).markedBy() && this.board.findSpace(2, 2).markedBy() && this.board.findSpace(1, 3).markedBy())) {
-      return this.board.findSpace(2, 2).markedBy();
-    }
-    //debugger;
-    var check = undefined;
-    var notMatch = true;
-    for (var i = 1; i <= 3; i++) {
-      for (var j = 1; j <= 3; j++) {
-        if (this.board.findSpace(i, j).markedBy() != undefined) {
-          if (check === undefined) {
-            check = this.board.findSpace(i, j).markedBy().mark;
-          } else if (check = this.board.findSpace(i, j).markedBy().mark) {
-            notMatch = false;
-          } else {
-            notMatch = true;
-          }
-        }
-      }
-      if (notMatch = false) {
-        return this.board.findSpace(i, j-1).markedBy();
-      }
-      check = undefined;
-    }
-
-    for (var i = 1; i <= 3; i++) {
-      for (var j = 1; j <= 3; j++) {
-        if (this.board.findSpace(j, i).markedBy() != undefined) {
-          if (check === undefined) {
-            check = this.board.findSpace(j, i).markedBy().mark;
-          } else if (check = this.board.findSpace(j, i).markedBy().mark) {
-            notMatch = false;
-          } else {
-            notMatch = true;
-          }
-        }
-      }
-    if (!notMatch) {
-      return this.board.findSpace(j-1, i).markedBy();
-    }
-    check = undefined;
-  }
-}
-
 $(document).ready(function() {
   $("form#new-game").submit(function(event) {
     event.preventDefault();
@@ -135,7 +87,10 @@ $(document).ready(function() {
     $(this).text(player.mark).removeClass("squares");
 
     if (new_game.board.threeInARow(player)) {
-      alert(player.mark + ' is the winner!');
+        if(confirm(player.mark + ' is the winner!')) {
+          location.reload();
+          console.log(new_game.board.nBoard)
+        }
     }
 
   });
